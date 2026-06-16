@@ -1,0 +1,1 @@
+puts "abcdefgh"[7]
