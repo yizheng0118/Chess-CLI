@@ -21,7 +21,6 @@ RSpec.describe Pawn do
             it 'can capture on d3' do
                 expect(pawn.moves).to include("exd3")
             end
-
             it 'can capture on f3' do
                 expect(pawn.moves).to include("exf3")
             end
@@ -39,10 +38,10 @@ RSpec.describe Pawn do
             it 'can move to e6' do 
                 expect(pawn.moves).to include("e6")
             end
-            it 'can capture on d5' do 
+            it 'can capture on d6' do 
                 expect(pawn.moves).to include("exd6")
             end
-            it 'can capture on f5' do
+            it 'can capture on f6' do
                 expect(pawn.moves).to include("exf6")
             end
         end
