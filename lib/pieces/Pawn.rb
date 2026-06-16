@@ -7,25 +7,32 @@ class Pawn < Piece
 
     def moves
         m = []
-        if self.side == 'W' 
-            # move forward one
-            if squareEmpty?(row+1, col)
+        if self.side == 'W'            
+            if squareEmpty?(row+1, col) # move forward one
                 encodeAndAddMove(m, row+1, col, false, false) 
             end
-            # move forward two if on starting rank
-            if row == 1 && squareEmpty?(row+2, col) 
+            if row == 1 && squareEmpty?(row+2, col) && squareEmpty?(row+1, col) # move forward two if on starting rank
                 encodeAndAddMove(m, row+2, col, false, false)
             end
-            # capture left
-            if row-1 >= 0 && !squareEmpty?(row+1,col-1) && board[row+1][col-1].side == 'B'
+            if row+1 <= 7 && col-1 >= 0 && !squareEmpty?(row+1,col-1) && board[row+1][col-1].side == 'B' # capture left
                 encodeAndAddMove(m, row+1, col-1, true, false)
             end
-            # capture right
-            if row+1 <= 7 && !squareEmpty?(row+1,col+1) && board[row+1][col+1].side == 'B'
+            if row+1 <= 7 && col+1 <=7 && !squareEmpty?(row+1,col+1) && board[row+1][col+1].side == 'B' # capture right
                 encodeAndAddMove(m, row+1, col+1, true, false)
             end
         elsif self.side == 'B'
-
+            if squareEmpty?(row-1,col) # move forward one
+                encodeAndAddMove(m, row-1, col, false, false)
+            end
+            if row == 6 && squareEmpty?(row-2,col) && squareEmpty?(row-1,col) # move forward two if on starting rank
+                encodeAndAddMove(m, row-2, col, false, false)
+            end
+            if row-1 >= 0 && col-1 >= 0 && !squareEmpty?(row-1,col-1) && board[row-1][col-1].side == 'W' #capture left
+                encodeAndAddMove(m, row-1, col-1, true, false)
+            end
+            if row-1 >= 0 && col+1 <= 7 && !squareEmpty?(row-1,col+1) && board[row-1][col-1].side == 'W' #capture right
+                encodeAndAddMove(m, row-1, col+1, true, false)
+            end
         end
         
         return m
