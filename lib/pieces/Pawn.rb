@@ -30,7 +30,7 @@ class Pawn < Piece
             if row-1 >= 0 && col-1 >= 0 && !squareEmpty?(row-1,col-1) && board[row-1][col-1].side == 'W' #capture left
                 encode_and_add_move(m, row-1, col-1, captures:true, check: detect_check(row-1,col-1))
             end
-            if row-1 >= 0 && col+1 <= 7 && !squareEmpty?(row-1,col+1) && board[row-1][col-1].side == 'W' #capture right
+            if row-1 >= 0 && col+1 <= 7 && !squareEmpty?(row-1,col+1) && board[row-1][col+1].side == 'W' #capture right
                 encode_and_add_move(m, row-1, col+1, captures:true, check: detect_check(row-1,col+1))
             end
         end
@@ -47,10 +47,10 @@ class Pawn < Piece
                 return true
             end
         elsif side == 'B'
-            if r-1 >= 0 && c-1 >= 0 && !squareEmpty?(r-1,c-1) && board[r-1][c-1].side == 'B' && board[r-1][c-1].name == 'K'
+            if r-1 >= 0 && c-1 >= 0 && !squareEmpty?(r-1,c-1) && board[r-1][c-1].side == 'W' && board[r-1][c-1].name == 'K'
                 return true
             end
-            if r-1 >= 0 && c+1 <= 7 && !squareEmpty?(r-1,c+1) && board[r-1][c+1].side == 'B' && board[r-1][c+1].name == 'K'
+            if r-1 >= 0 && c+1 <= 7 && !squareEmpty?(r-1,c+1) && board[r-1][c+1].side == 'W' && board[r-1][c+1].name == 'K'
                 return true
             end
         end
