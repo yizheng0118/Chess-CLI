@@ -10,40 +10,40 @@ class Rook < Piece
         t_c = col
         while t_c > 0 # check left
             if squareEmpty?(row,t_c-1)
-                encode_and_add_move(m, row, t_c-1, check:detect_check(row,t_c-1))
+                encode_and_add_move(m, row, t_c-1)
                 t_c -= 1
             else # !squareEmpty?(row,t_c-1)
-                if board[row][t_c-1].side != self.side then encode_and_add_move(m, row, t_c-1, check:detect_check(row,t_c-1), captures:true) end
+                if board[row][t_c-1].side != self.side then encode_and_add_move(m, row, t_c-1, captures:true) end
                 break
             end
         end
         t_c = col
         while t_c < 7 # check right
             if squareEmpty?(row,t_c+1)
-                encode_and_add_move(m, row, t_c+1, check:detect_check(row,t_c+1))
+                encode_and_add_move(m, row, t_c+1)
                 t_c += 1
             else
-                if board[row][t_c+1].side != self.side then encode_and_add_move(m, row, t_c+1, check:detect_check(row,t_c+1), captures:true) end
+                if board[row][t_c+1].side != self.side then encode_and_add_move(m, row, t_c+1, captures:true) end
                 break
             end
         end
         t_r = row
         while t_r > 0 # check down
             if squareEmpty?(t_r-1,col)
-                encode_and_add_move(m, t_r-1, col, check:detect_check(t_r-1,col))
+                encode_and_add_move(m, t_r-1, col)
                 t_r -= 1
             else
-                if board[t_r-1][col].side != self.side then encode_and_add_move(m, t_r-1, col, check:detect_check(t_r-1,col), captures:true) end
+                if board[t_r-1][col].side != self.side then encode_and_add_move(m, t_r-1, col, captures:true) end
                 break
             end
         end
         t_r = row
         while t_r < 7 # check up
             if squareEmpty?(t_r+1,col)
-                encode_and_add_move(m, t_r+1, col, check:detect_check(t_r+1,col))
+                encode_and_add_move(m, t_r+1, col)
                 t_r += 1
             else
-                if board[t_r+1][col].side != self.side then encode_and_add_move(m, t_r+1, col, check:detect_check(t_r+1,col), captures:true) end
+                if board[t_r+1][col].side != self.side then encode_and_add_move(m, t_r+1, col, captures:true) end
                 break
             end
         end
@@ -82,7 +82,8 @@ class Rook < Piece
         return false
     end
 
-    def encode_and_add_move(list, r, c, captures:false, check:false)
+    def encode_and_add_move(list, r, c, captures:false)
+        check = detect_check(r,c)
         string = 'R' + (captures ? 'x' : '') + 'abcdefgh'[c] + (r+1).to_s + (check ? '+' : '')
         list.append(string)
     end

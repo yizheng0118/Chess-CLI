@@ -13,11 +13,11 @@ class Bishop < Piece
         tc = col
         while tr < 7 && tc > 0
             if squareEmpty?(tr+1,tc-1)
-                encode_and_add_move(m, tr+1, tc-1, check:detect_check(tr+1,tc-1))
+                encode_and_add_move(m, tr+1, tc-1)
                 tr += 1
                 tc -= 1 
             else
-                if board[tr+1][tc-1].side != self.side then encode_and_add_move(m,tr+1,tc-1,captures:true,check:detect_check(tr+1,tc-1)) end
+                if board[tr+1][tc-1].side != self.side then encode_and_add_move(m,tr+1,tc-1,captures:true) end
                 break
             end
         end
@@ -27,11 +27,11 @@ class Bishop < Piece
         tc = col
         while tr < 7 && tc < 7
             if squareEmpty?(tr+1,tc+1)
-                encode_and_add_move(m,tr+1,tc+1,check:detect_check(tr+1,tc+1))
+                encode_and_add_move(m,tr+1,tc+1)
                 tr += 1
                 tc += 1
             else
-                if board[tr+1][tc+1].side != self.side then encode_and_add_move(m,tr+1,tc+1,captures:true,check:detect_check(tr+1,tc+1)) end
+                if board[tr+1][tc+1].side != self.side then encode_and_add_move(m,tr+1,tc+1,captures:true) end
                 break
             end
         end
@@ -41,11 +41,11 @@ class Bishop < Piece
         tc = col
         while tr > 0 && tc > 0
             if squareEmpty?(tr-1,tc-1)
-                encode_and_add_move(m,tr-1,tc-1,check:detect_check(tr-1,tc-1))
+                encode_and_add_move(m,tr-1,tc-1)
                 tr -= 1
                 tc -= 1
             else
-                if board[tr-1][tc-1].side != self.side then encode_and_add_move(m,tr-1,t-1,captures:true,check:detect_check(tr-1,tc-1)) end
+                if board[tr-1][tc-1].side != self.side then encode_and_add_move(m,tr-1,t-1,captures:true) end
                 break
             end
         end
@@ -55,11 +55,11 @@ class Bishop < Piece
         tc = col
         while tr > 0 && tc < 7
             if squareEmpty?(tr-1,tc+1)
-                encode_and_add_move(m,tr-1,tc+1,check:detect_check(tr-1,tc+1))
+                encode_and_add_move(m,tr-1,tc+1)
                 tr -= 1
                 tc += 1
             else
-                if board[tr-1][tc+1].side != self.side then encode_and_add_move(m,tr-1,tc+1,captures:true,check:detect_check(tr-1,tc+1)) end
+                if board[tr-1][tc+1].side != self.side then encode_and_add_move(m,tr-1,tc+1,captures:true) end
                 break
             end
         end
@@ -123,7 +123,8 @@ class Bishop < Piece
         return false
     end
 
-    def encode_and_add_move(list, r, c, captures:false, check:false)
+    def encode_and_add_move(list, r, c, captures:false)
+        check = detect_check(r,c,)
         string = 'B' + (captures ? 'x' : '') + 'abcdefgh'[c] + (r+1).to_s + (check ? '+' : '')
         list.append(string)
     end
