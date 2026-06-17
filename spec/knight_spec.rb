@@ -12,15 +12,15 @@ RSpec.describe Knight do
             end
             context 'B King on e8' do
                 before do
-                    board[7][4] = described_class.new('K','B',7,4,board)
+                    board[7][4] = double(side:'B',name:'K')
                 end
                 it 'can check on d6 and f6' do
                     expect(knight.moves).to include('Nd6+','Nf6+')
                 end
                 context 'B pawn on d6 and f6' do
                     before do
-                        board[5][3] = described_class.new('P','B',5,3,board)
-                        board[5][5] = described_class.new('P','B',5,5,board)
+                        board[5][3] = double(side:'B',name:'P')
+                        board[5][5] = double(side:'B',name:'P')
                     end
                     it 'can take on d6 and f6 with check' do
                         expect(knight.moves).to include('Nxd6+','Nxf6+')
