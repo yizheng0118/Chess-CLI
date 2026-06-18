@@ -17,4 +17,15 @@ class Piece
         return self.board[r][c] == nil
     end
     
+    def decode_move(str)
+        m = str.match(/^([KQRBN])?x?([a-h][1-8])([+#])?$/)
+        hash = 
+        {
+            piece: m[1] || 'P',
+            r: m[2][1].to_i - 1,
+            c: "abcdefgh".index(m[2][0]),
+        }
+        return hash
+    end
+    
 end

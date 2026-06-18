@@ -1,7 +1,8 @@
 require_relative './Rook.rb'
+require_relative './Queen.rb'
+require_relative './Piece.rb'
 
 board = Array.new(8) { Array.new(8) }
-rook = Rook.new('R','W',0,0,board)
-board[0][0] = rook
+q = Queen.new('Q','W',0,0,board)
 
-puts rook.moves.inspect
+puts q.moves.inspect
