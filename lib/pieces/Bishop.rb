@@ -45,7 +45,7 @@ class Bishop < Piece
                 tr -= 1
                 tc -= 1
             else
-                if board[tr-1][tc-1].side != self.side then encode_and_add_move(m,tr-1,t-1,captures:true) end
+                if board[tr-1][tc-1].side != self.side then encode_and_add_move(m,tr-1,tc-1,captures:true) end
                 break
             end
         end

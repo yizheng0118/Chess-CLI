@@ -13,11 +13,15 @@ class Knight < Piece
             r = row+dr
             c1 = col+dc1
             c2 = col+dc2
-            if squareEmpty?(r,c1) then encode_and_add_move(m,r,c1) 
-            elsif board[r][c1].side != self.side then encode_and_add_move(m,r,c1,captures:true)
+            if r>=0&&r<=7 && c1>=0&&c1<=7 
+                if squareEmpty?(r,c1) then encode_and_add_move(m,r,c1) 
+                elsif board[r][c1].side != self.side then encode_and_add_move(m,r,c1,captures:true)
+                end
             end
-            if squareEmpty?(r,c2) then encode_and_add_move(m,r,c2)
-            elsif board[r][c2].side != self.side then encode_and_add_move(m,r,c2,captures:true)
+            if r>=0&&r<=7 && c2>=0&&c2<=7
+                if squareEmpty?(r,c2) then encode_and_add_move(m,r,c2)
+                elsif board[r][c2].side != self.side then encode_and_add_move(m,r,c2,captures:true)
+                end
             end
         end
         return m
@@ -27,8 +31,12 @@ class Knight < Piece
         [-2,-1,1,2].each do |dr|
             dc1 = 3 - dr.abs
             dc2 = -dc1
-            if !squareEmpty?(r+dr,c+dc1) && board[r+dr][c+dc1].side != self.side && board[r+dr][c+dc1].name == 'K' then return true end
-            if !squareEmpty?(r+dr,c+dc2) && board[r+dr][c+dc2].side != self.side && board[r+dr][c+dc2].name == 'K' then return true end
+            if r + dr >= 0 && r + dr <= 7 && c + dc1 >= 0 && c + dc1 <= 7 
+                if !squareEmpty?(r+dr,c+dc1) && board[r+dr][c+dc1].side != self.side && board[r+dr][c+dc1].name == 'K' then return true end
+            end
+            if r + dr >= 0 && r + dr <= 7 && c + dc2 >= 0 && c + dc2 <= 7    
+                if !squareEmpty?(r+dr,c+dc2) && board[r+dr][c+dc2].side != self.side && board[r+dr][c+dc2].name == 'K' then return true end
+            end        
         end
         return false
     end

@@ -5,8 +5,8 @@ RSpec.describe Knight do
 
     describe '#moves' do
         let(:board) { Array.new(8) { Array.new(8) } }
-        subject(:knight) { described_class.new('N','W',3,4,board) }
         context 'W Knight on e4' do
+            subject(:knight) { described_class.new('N','W',3,4,board) }
             it 'Nc5, Nd6, Nf6, Ng5, Ng3, Nf2, Nd2, Nc3' do
                 expect(knight.moves).to match_array(['Nc5','Nd6','Nf6','Ng5','Ng3','Nf2','Nd2','Nc3'])
             end
@@ -26,6 +26,12 @@ RSpec.describe Knight do
                         expect(knight.moves).to include('Nxd6+','Nxf6+')
                     end
                 end
+            end
+        end
+        context 'W Knight on b1' do 
+            subject(:knight) { described_class.new('N','W',0,1,board) }
+            it 'can only move to a3 c3 d2' do
+                expect(knight.moves).to match_array(['Na3','Nc3','Nd2'])
             end
         end
 

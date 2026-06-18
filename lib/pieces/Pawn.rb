@@ -1,6 +1,5 @@
 require_relative './Piece.rb'
 class Pawn < Piece
-
     def initialize(name,side,row,col,board)
         super(name,side,row,col,board)
     end

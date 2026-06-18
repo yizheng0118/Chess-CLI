@@ -1,5 +1,5 @@
 class Piece
-    attr_reader :name, :side, :row, :col, :board
+    attr_accessor :name, :side, :row, :col, :board
     def initialize(name, side, row, col, board)
         @name = name
         @side = side
@@ -10,6 +10,13 @@ class Piece
 
     def moves
         return []
+    end
+
+    def moveTo(r,c)
+        self.board[row][col] = nil
+        self.row = r
+        self.col = c
+        self.board[row][col] = self
     end
 
     def squareEmpty?(r,c)
@@ -26,6 +33,10 @@ class Piece
             c: "abcdefgh".index(m[2][0]),
         }
         return hash
+    end
+
+    def to_s
+        return side =='W' ? self.name : self.name.downcase
     end
     
 end

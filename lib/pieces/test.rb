@@ -1,8 +1,14 @@
 require_relative './Rook.rb'
 require_relative './Queen.rb'
 require_relative './Piece.rb'
+require_relative '../ChessBoard.rb'
 
-board = Array.new(8) { Array.new(8) }
-q = Queen.new('Q','W',0,0,board)
+b = ChessBoard.new
+b.new_game
+puts b
 
-puts q.moves.inspect
+while true
+    b.player_make_move
+    puts b
+end
+

@@ -10,6 +10,14 @@ class Queen < Piece
         @rook = Rook.new("QR",side,row,col,board)
     end
 
+    def moveTo(r,c)
+        super(r,c)
+        self.bishop.row = r
+        self.bishop.col = c
+        self.rook.row = r
+        self.rook.col = c
+    end
+
     def moves
         m = self.bishop.moves + self.rook.moves
         m.map do |s|
