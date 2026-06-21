@@ -89,6 +89,7 @@ class ChessBoard
             p.moves.each do |m|
                 h1 = p.decode_move(m)
                 h2 = p.decode_move(move)
+                if h2 == nil then return nil end
                 if h1[:piece] == h2[:piece] && h1[:r] == h2[:r] && h1[:c] == h2[:c]
                     return p
                 end 
@@ -110,9 +111,8 @@ class ChessBoard
             if captured_piece.side == 'W' then self.white_pieces.delete(captured_piece)
             else self.black_pieces.delete(captured_piece) end
             if (piece.side=='W' && white_king_in_check?) || (piece.side == 'B' && black_king_in_check?)
-                binding.pry
-                captured_piece.moveTo(target_row,target_col)
                 piece.moveTo(original_row,original_col)
+                captured_piece.moveTo(target_row,target_col)
                 if captured_piece.side == 'W' then self.white_pieces.append(captured_piece)
                 else self.black_pieces.append(captured_piece) end
                 return nil
@@ -126,7 +126,45 @@ class ChessBoard
         end
         
         #detect checkmate
+        black_king = self.black_pieces.find {|p| p.name == 'K' && p.side == 'B' }
+        if piece.side == 'W' && black_king_in_check?
+            move_to_stop_check_found = false
+            self.black_pieces.each do |bp|
+                if move_to_stop_check_found then break end
+                before_row = bp.row
+                before_col = bp.col
+                bp.moves.each do |m|
+                    h = bp.decode(m)
+                    temp_row = h[:r]
+                    temp_col = h[:c]
+                    temp_captured_piece = nil
+                    if temp_row == piece.row && temp_col == piece.col
+                        move_to_stop_check_found = true
+                        break
+                    end
+                    if !bp.squareEmpty?(temp_row,temp_col) 
+                        temp_captured_piece = self.board[temp_row][temp_col] 
+                    end
+                    bp.moveTo(temp_row,temp_col)
 
+                    capture_king_moves = piece.moves.find do |m2|
+                        h2 = piece.decode(m2)
+                        (h2[:r] == black_king.row && h2[:c] == black_king.col)
+                    end
+                    if capture_king_moves.size == 0 
+                        move_to_stop_check_found = true 
+                        break
+                    end
+                    bp.moveTo(before_row,before_col)
+                    if temp_captured_piece!=nil then temp_captured_piece.moveTo(temp_row,temp_col) end
+                end
+            end
+            if move_to_stop_check_found == false
+                puts "CHECKMATE"
+                puts self
+                exit(0)
+            end
+        end
 
         return 1
     end
@@ -143,10 +181,8 @@ class ChessBoard
     def white_king_in_check?
         white_king = self.white_pieces.find { |k| k.instance_of?(King) }
         if white_king == nil then raise "Error 404: white king not found" end
-        #puts "black moves"
         self.black_pieces.each do | black_piece |
             black_piece_moves = black_piece.moves
-            #p black_piece_moves
             black_piece_moves.each do | m |
                 h = black_piece.decode_move(m)
                 if h[:r] == white_king.row && h[:c] == white_king.col then return true end
@@ -157,11 +193,8 @@ class ChessBoard
     def black_king_in_check?
         black_king = self.black_pieces.find { |k| k.instance_of?(King) }
         if black_king == nil then raise "Error 404: black king not found" end
-        #puts "white moves"
         self.white_pieces.each do | white_piece |
-            #binding.pry
             white_piece_moves = white_piece.moves
-            #p white_piece_moves
             white_piece_moves.each do |m|
                 h = white_piece.decode_move(m)
                 if h[:r] == black_king.row && h[:c] == black_king.col then return true end

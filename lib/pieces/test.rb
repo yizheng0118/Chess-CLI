@@ -29,6 +29,6 @@ while true
             puts p.moves.inspect
         end
     end
-        puts b.turn
+    puts b.turn
 end
 
