@@ -28,6 +28,7 @@ class Queen < Piece
             end
             s
         end
+        
     end
 
 end

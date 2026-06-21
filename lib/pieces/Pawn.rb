@@ -61,4 +61,8 @@ class Pawn < Piece
         list.append(string)
     end
 
+    def inspect
+        return self.name
+    end
+
 end

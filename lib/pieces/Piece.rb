@@ -25,7 +25,7 @@ class Piece
     end
     
     def decode_move(str)
-        m = str.match(/^([KQRBN])?x?([a-h][1-8])([+#])?$/)
+        m = str.match(/^([KQRBNabcdefgh])?x?([a-h][1-8])([+#])?$/)
         hash = 
         {
             piece: m[1] || 'P',
