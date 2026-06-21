@@ -3,7 +3,7 @@ require_relative './spec_helper.rb'
 
 RSpec.describe Rook do
     let(:board) { Array.new(8) { Array.new(8) } }
-    describe '#move' do
+    describe '#moves' do
         context 'rook on a1' do 
             subject(:rook) { described_class.new('R','W',0,0,board) }
             it 'can move up and right' do
@@ -45,5 +45,46 @@ RSpec.describe Rook do
             end
         end
     end
-
+    describe '#moves_that_capture_own_pieces' do
+        context 'W rook on e4 surrounded by 4 W pawns' do
+            subject(:rook) { described_class.new('R','W',3,4,board)}
+            it 'Rxe5, Rxe3, Rxd4, Rxf4' do
+                board[3][3] = described_class.new('P','W',3,3,board)
+                board[3][5] = described_class.new('P','W',3,5,board)
+                board[2][4] = described_class.new('P','W',2,4,board)
+                board[4][4] = described_class.new('P','W',4,4,board)
+                expect(rook.moves_that_capture_own_pieces).to match_array(['Rxe5','Rxe3','Rxd4','Rxf4'])
+            end
+        end
+        context 'W rook on e4 surrounded by 4 W pawns on edge of board' do
+            subject(:rook) { described_class.new('R','W',3,4,board)}
+            it 'Rxe8, Rxe1, Rxa4, Rxh4' do
+                board[3][0] = described_class.new('P','W',3,0,board)
+                board[3][7] = described_class.new('P','W',3,7,board)
+                board[0][4] = described_class.new('P','W',0,4,board)
+                board[7][4] = described_class.new('P','W',7,4,board)
+                expect(rook.moves_that_capture_own_pieces).to match_array(['Rxe8','Rxe1','Rxa4','Rxh4'])
+            end
+        end
+        context 'B rook on e4 surrounded by 4 B pawns' do
+            subject(:rook) { described_class.new('R','B',3,4,board)}
+            it 'Rxe5, Rxe3, Rxd4, Rxf4' do
+                board[3][3] = described_class.new('P','B',3,3,board)
+                board[3][5] = described_class.new('P','B',3,5,board)
+                board[2][4] = described_class.new('P','B',2,4,board)
+                board[4][4] = described_class.new('P','B',4,4,board)
+                expect(rook.moves_that_capture_own_pieces).to match_array(['Rxe5','Rxe3','Rxd4','Rxf4'])
+            end
+        end
+        context 'B rook on e4 surrounded by 4 B pawns on edge of board' do
+            subject(:rook) { described_class.new('R','B',3,4,board)}
+            it 'Rxe8, Rxe1, Rxa4, Rxh4' do
+                board[3][0] = described_class.new('P','B',3,0,board)
+                board[3][7] = described_class.new('P','B',3,7,board)
+                board[0][4] = described_class.new('P','B',0,4,board)
+                board[7][4] = described_class.new('P','B',7,4,board)
+                expect(rook.moves_that_capture_own_pieces).to match_array(['Rxe8','Rxe1','Rxa4','Rxh4'])
+            end
+        end
+    end
 end

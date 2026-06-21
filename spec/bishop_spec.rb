@@ -2,9 +2,9 @@ require_relative './spec_helper.rb'
 require_relative '../lib/pieces/Bishop.rb'
 
 RSpec.describe Bishop do
-
+    let(:board) { Array.new(8) {Array.new(8) } }
     describe '#moves' do
-        let(:board) { Array.new(8) {Array.new(8) } }
+
         context 'W bishop on e4' do
             subject(:bishop) { described_class.new('B','W',3,4,board)}
             it 'can move up to the left' do
@@ -35,6 +35,49 @@ RSpec.describe Bishop do
                     end
                 end
             end
+        end
+    end
+
+    describe '#moves_that_capture_own_pieces' do
+        context 'W bishop of e4' do
+            subject(:bishop) { described_class.new('B','W',3,4,board)}
+            context 'surrounded by white pawns' do
+                it 'can capture them' do
+                    board[2][3] = double(side:'W')
+                    board[4][3] = double(side:'W')
+                    board[4][5] = double(side:'W')
+                    board[2][5] = double(side:'W')
+                    expect(bishop.moves_that_capture_own_pieces).to match_array(['Bxd5','Bxf5','Bxd3','Bxf3'])
+                end
+            end
+            context 'surrounded by black pawns' do
+                it 'can\'t capture them' do
+                    board[2][3] = double(side:'B')
+                    board[4][3] = double(side:'B')
+                    board[4][5] = double(side:'B')
+                    board[2][5] = double(side:'B')
+                    expect(bishop.moves_that_capture_own_pieces).to match_array([])
+                end
+            end
+            context 'surrounded by white pawns on edge of board' do
+                it 'can capture them' do 
+                    board[0][1] = double(side:'W')
+                    board[0][7] = double(side:'W')
+                    board[7][0] = double(side:'W')
+                    board[6][7] = double(side:'W')
+                    expect(bishop.moves_that_capture_own_pieces).to match_array(['Bxa8','Bxb1','Bxh1','Bxh7'])
+                end
+            end
+            context 'surrounded by black pawns on edge of board' do
+                it 'can\'t capture them' do 
+                    board[0][1] = double(side:'B')
+                    board[0][7] = double(side:'B')
+                    board[7][0] = double(side:'B')
+                    board[6][7] = double(side:'B')
+                    expect(bishop.moves_that_capture_own_pieces).to match_array([])
+                end
+            end
+
         end
     end
 

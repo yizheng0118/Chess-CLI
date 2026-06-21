@@ -6,6 +6,7 @@ class Piece
         @row = row
         @col = col
         @board = board
+        board[row][col] = self
     end
 
     def moves

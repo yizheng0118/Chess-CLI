@@ -2,9 +2,8 @@ require_relative './spec_helper.rb'
 require_relative '../lib/pieces/Knight.rb'
 
 RSpec.describe Knight do
-
+    let(:board) { Array.new(8) { Array.new(8) } }
     describe '#moves' do
-        let(:board) { Array.new(8) { Array.new(8) } }
         context 'W Knight on e4' do
             subject(:knight) { described_class.new('N','W',3,4,board) }
             it 'Nc5, Nd6, Nf6, Ng5, Ng3, Nf2, Nd2, Nc3' do
@@ -34,7 +33,25 @@ RSpec.describe Knight do
                 expect(knight.moves).to match_array(['Na3','Nc3','Nd2'])
             end
         end
-
     end
 
+    describe '#moves_that_capture_own_pieces' do 
+        context 'W Knight on e4 with 8 own pawns to capture' do
+            subject(:knight) { described_class.new('N','W',3,4,board)}
+            it 'can capture them' do
+                p knight.moves
+                [-2,-1,1,2].each do |dr|
+                    dc1 = 3 - dr.abs
+                    dc2 = -dc1
+                    r = 3+dr
+                    c1 = 4+dc1
+                    c2 = 4+dc2
+                    board[r][c1] = double(side:'W')
+                    board[r][c2] = double(side:'W')
+                end
+                expect(knight.moves_that_capture_own_pieces).to match_array(['Nxd6','Nxf6','Nxc5','Nxg5','Nxc3','Nxg3','Nxd2','Nxf2'])
+            end
+        end
+        
+    end
 end

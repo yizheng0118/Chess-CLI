@@ -22,45 +22,94 @@ class ChessBoard
         (0..7).each do |n|
             white_pawn = Pawn.new('P','W',1,n,board)
             white_pieces.append(white_pawn)
-            self.board[1][n] = white_pawn
             black_pawn = Pawn.new('p','B',6,n,board)
             black_pieces.append(black_pawn)
-            self.board[6][n] = black_pawn
         end
         r1 = Rook.new('R','W',0,0,board)
-        self.board[0][0] = r1
         k1 = Knight.new('N','W',0,1,board)
-        self.board[0][1] = k1
         b1 = Bishop.new('B','W',0,2,board)
-        self.board[0][2] = b1
         q = Queen.new('Q','W',0,3,board)
-        self.board[0][3] = q
         k = King.new('K','W',0,4,board)
-        self.board[0][4] = k
         b2 = Bishop.new('B','W',0,5,board)
-        self.board[0][5] = b2
         k2 = Knight.new('N','W',0,6,board)
-        self.board[0][6] = k2
         r2 = Rook.new('R','W',0,7,board)
-        self.board[0][7] = r2
         self.white_pieces += [r1,r2,k1,k2,b1,b2,q,k]
         r1 = Rook.new('r','B',7,0,board)
-        self.board[7][0] = r1
         k1 = Knight.new('n','B',7,1,board)
-        self.board[7][1] = k1
         b1 = Bishop.new('b','B',7,2,board)
-        self.board[7][2] = b1
         q = Queen.new('q','B',7,3,board)
-        self.board[7][3] = q
         k = King.new('K','B',7,4,board)
-        self.board[7][4] = k
         b2 = Bishop.new('b','B',7,5,board)
-        self.board[7][5] = b2
         k2 = Knight.new('n','B',7,6,board)
-        self.board[7][6] = k2
         r2 = Rook.new('r','B',7,7,board)
-        self.board[7][7] = r2
         self.black_pieces += [r1,r2,k1,k2,b1,b2,q,k]
+    end
+
+    # rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+    def import_game(fen)
+        self.board = Array.new(8) { Array.new(8) }
+        self.white_pieces = []
+        self.black_pieces = []
+        self.turn = 'W'
+        row = 7
+        col = 0
+        fen.each_char do |char|
+            case char
+                when 'r'
+                    p = Rook.new('r','B',row,col,board)
+                    self.black_pieces.append(p)
+                    col += 1
+                when 'n'
+                    p = Knight.new('n','B',row,col,board)
+                    self.black_pieces.append(p)
+                    col += 1
+                when 'b'
+                    p = Bishop.new('b','B',row,col,board)
+                    self.black_pieces.append(p)
+                    col += 1
+                when 'q'
+                    p = Queen.new('q','B',row,col,board)
+                    self.black_pieces.append(p)
+                    col += 1
+                when 'k' 
+                    p = King.new('K','B',row,col,board)
+                    self.black_pieces.append(p)
+                    col += 1
+                when 'p'
+                    p = Pawn.new('p','B',row,col,board)
+                    self.black_pieces.append(p)
+                    col += 1
+                when 'R'
+                    p = Rook.new('R','W',row,col,board)
+                    self.white_pieces.append(p)
+                    col += 1
+                when 'N'
+                    p = Knight.new('N','W',row,col,board)
+                    self.white_pieces.append(p)
+                    col += 1
+                when 'B'
+                    p = Bishop.new('B','W',row,col,board)
+                    self.white_pieces.append(p)
+                    col += 1
+                when 'Q'
+                    p = Queen.new('Q','W',row,col,board)
+                    self.white_pieces.append(p)
+                    col += 1
+                when 'K'
+                    p = King.new('K','W',row,col,board)
+                    self.white_pieces.append(p)
+                    col += 1
+                when 'P'
+                    p = Pawn.new('P','W',row,col,board)
+                    self.white_pieces.append(p)
+                    col += 1
+                when '/'
+                    row -= 1
+                    col = 0
+                when /[1-8]/
+                    col += char.to_i
+            end
+        end
     end
 
     def player_make_move(move)
@@ -99,73 +148,6 @@ class ChessBoard
     end
 
     def move_piece_on_board(move,piece)
-        original_row = piece.row
-        original_col = piece.col
-        h = piece.decode_move(move) 
-        target_row = h[:r]
-        target_col = h[:c]
-
-        if !piece.squareEmpty?(target_row,target_col) #capturing a piece
-            captured_piece = self.board[target_row][target_col]
-            piece.moveTo(target_row,target_col)
-            if captured_piece.side == 'W' then self.white_pieces.delete(captured_piece)
-            else self.black_pieces.delete(captured_piece) end
-            if (piece.side=='W' && white_king_in_check?) || (piece.side == 'B' && black_king_in_check?)
-                piece.moveTo(original_row,original_col)
-                captured_piece.moveTo(target_row,target_col)
-                if captured_piece.side == 'W' then self.white_pieces.append(captured_piece)
-                else self.black_pieces.append(captured_piece) end
-                return nil
-            end
-        else
-            piece.moveTo(target_row,target_col)
-            if (piece.side == 'W' && white_king_in_check?) || (piece.side == 'B' && black_king_in_check?)
-                piece.moveTo(original_row,original_col)
-                return nil
-            end
-        end
-        
-        #detect checkmate
-        black_king = self.black_pieces.find {|p| p.name == 'K' && p.side == 'B' }
-        if piece.side == 'W' && black_king_in_check?
-            move_to_stop_check_found = false
-            self.black_pieces.each do |bp|
-                if move_to_stop_check_found then break end
-                before_row = bp.row
-                before_col = bp.col
-                bp.moves.each do |m|
-                    h = bp.decode(m)
-                    temp_row = h[:r]
-                    temp_col = h[:c]
-                    temp_captured_piece = nil
-                    if temp_row == piece.row && temp_col == piece.col
-                        move_to_stop_check_found = true
-                        break
-                    end
-                    if !bp.squareEmpty?(temp_row,temp_col) 
-                        temp_captured_piece = self.board[temp_row][temp_col] 
-                    end
-                    bp.moveTo(temp_row,temp_col)
-
-                    capture_king_moves = piece.moves.find do |m2|
-                        h2 = piece.decode(m2)
-                        (h2[:r] == black_king.row && h2[:c] == black_king.col)
-                    end
-                    if capture_king_moves.size == 0 
-                        move_to_stop_check_found = true 
-                        break
-                    end
-                    bp.moveTo(before_row,before_col)
-                    if temp_captured_piece!=nil then temp_captured_piece.moveTo(temp_row,temp_col) end
-                end
-            end
-            if move_to_stop_check_found == false
-                puts "CHECKMATE"
-                puts self
-                exit(0)
-            end
-        end
-
         return 1
     end
 

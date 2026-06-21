@@ -7,7 +7,6 @@ class Bishop < Piece
 
     def moves
         m = []
-
         # top left
         tr = row
         tc = col
@@ -21,7 +20,6 @@ class Bishop < Piece
                 break
             end
         end
-
         # top right
         tr = row
         tc = col
@@ -35,7 +33,6 @@ class Bishop < Piece
                 break
             end
         end
-
         # bottom left
         tr = row
         tc = col
@@ -49,7 +46,6 @@ class Bishop < Piece
                 break
             end
         end
-
         # bottom right
         tr = row
         tc = col
@@ -63,7 +59,59 @@ class Bishop < Piece
                 break
             end
         end
+        return m
+    end
 
+    def moves_that_capture_own_pieces
+        m = []
+        # top left
+        tr = row
+        tc = col
+        while tr < 7 && tc > 0
+            if squareEmpty?(tr+1,tc-1)
+                tr += 1
+                tc -= 1 
+            else
+                if board[tr+1][tc-1].side == self.side then encode_and_add_move(m,tr+1,tc-1,captures:true) end
+                break
+            end
+        end
+        # top right
+        tr = row
+        tc = col
+        while tr < 7 && tc < 7
+            if squareEmpty?(tr+1,tc+1)
+                tr += 1
+                tc += 1
+            else
+                if board[tr+1][tc+1].side == self.side then encode_and_add_move(m,tr+1,tc+1,captures:true) end
+                break
+            end
+        end
+        # bottom left
+        tr = row
+        tc = col
+        while tr > 0 && tc > 0
+            if squareEmpty?(tr-1,tc-1)
+                tr -= 1
+                tc -= 1
+            else
+                if board[tr-1][tc-1].side == self.side then encode_and_add_move(m,tr-1,tc-1,captures:true) end
+                break
+            end
+        end
+        # bottom right
+        tr = row
+        tc = col
+        while tr > 0 && tc < 7
+            if squareEmpty?(tr-1,tc+1)
+                tr -= 1
+                tc += 1
+            else
+                if board[tr-1][tc+1].side == self.side then encode_and_add_move(m,tr-1,tc+1,captures:true) end
+                break
+            end
+        end
         return m
     end
 

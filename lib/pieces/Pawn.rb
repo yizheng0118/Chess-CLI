@@ -56,13 +56,29 @@ class Pawn < Piece
         return false
     end
 
+    def moves_that_capture_own_pieces
+        m = []
+        if self.side == 'W'
+            if row+1 <= 7 && col-1 >= 0 && !squareEmpty?(row+1,col-1) && board[row+1][col-1].side == self.side
+                encode_and_add_move(m,row+1,col-1,captures:true)
+            end
+            if row+1 <= 7 && col+1 <= 7 && !squareEmpty?(row+1,col+1) && board[row+1][col+1].side == self.side
+                encode_and_add_move(m,row+1,col+1,captures:true)
+            end
+        else
+            if row-1 >= 0 && col-1 >=0 && !squareEmpty?(row-1,col-1) && board[row-1][col-1].side == self.side
+                encode_and_add_move(m,row-1,col-1,captures:true)
+            end
+            if row-1 >= 0 && col+1 <= 7 && !squareEmpty?(row-1,col+1) && board[row-1][col+1].side == self.side
+                encode_and_add_move(m,row-1,col+1,captures:true)
+            end
+        end
+        m
+    end
+
     def encode_and_add_move(list, r, c, captures:false, check:false, promote:false, promo_result:'')
         string = (captures ? 'abcdefgh'[col] + 'x' : '') + 'abcdefgh'[c] + (r+1).to_s + (promote ? "=#{promo_result}" : '') + (check ? '+' : '')
         list.append(string)
-    end
-
-    def inspect
-        return self.name
     end
 
 end

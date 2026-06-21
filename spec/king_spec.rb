@@ -1,5 +1,6 @@
 require_relative './spec_helper.rb'
 require_relative '../lib/pieces/King.rb'
+require_relative '../lib/pieces/Pawn.rb'
 
 RSpec.describe King do
     let(:board) { Array.new(8) { Array.new(8) } }
@@ -24,7 +25,7 @@ RSpec.describe King do
                 moves = ['Kd1','Kd2','Ke2','Kf2','Kf1']
                 expect(king.moves).to match_array(moves)
             end
-            context 'fully surrounded by own pieces' do
+            context 'fully surrounded by own pieces,but can capture own pieces' do
                 it 'cannot move' do
                     board[0][3] = double(side:'W')
                     board[0][5] = double(side:'W')
@@ -32,16 +33,17 @@ RSpec.describe King do
                     board[1][4] = double(side:'W')
                     board[1][5] = double(side:'W')
                     expect(king.moves).to match_array([])
+                    expect(king.moves_that_capture_own_pieces).to match_array(['Kxd1','Kxd2','Kxe2','Kxf2','Kxf1'])
                 end
             end
             context 'fully surrounded by enemy pieces' do 
-                moves = ['Kxd1','Kxd2','Kxe2','Kxf2','Kxf1']
-                it 'can capture all of them' do
-                    board[0][3] = double(side:'B')
-                    board[0][5] = double(side:'B')
-                    board[1][3] = double(side:'B')
-                    board[1][4] = double(side:'B')
-                    board[1][5] = double(side:'B')
+                moves = ['Kxd2','Kxe2','Kxf2']
+                it 'can only capture the undefended pawns' do
+                    board[0][3] = Pawn.new('p','B',0,3,board)
+                    board[0][5] = Pawn.new('p','B',0,5,board)
+                    board[1][3] = Pawn.new('p','B',1,3,board)
+                    board[1][4] = Pawn.new('p','B',1,4,board)
+                    board[1][5] = Pawn.new('p','B',1,5,board)
                     expect(king.moves).to match_array(moves)
                 end
 

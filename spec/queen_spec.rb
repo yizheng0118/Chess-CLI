@@ -60,4 +60,19 @@ RSpec.describe Queen do
         end
     end
 
+    describe '#moves_that_capture_own_pieces' do
+        context 'white Queen on a1 with white pawns on a2, b1, b2,c3' do
+            subject(:queen) { described_class.new('Q','W',0,0,board)} 
+            it 'Qxa2, Qxb1, Qxb2' do
+                board[0][1] = double(side:'W')
+                board[1][0] = double(side:'W')
+                board[1][1] = double(side:'W')
+                board[2][2] = double(side:'W')
+                board[0][2] = double(side:'W')
+                board[2][0] = double(side:'W')
+                expect(queen.moves_that_capture_own_pieces).to match_array(['Qxa2','Qxb1','Qxb2'])
+            end
+        end
+    end
+
 end

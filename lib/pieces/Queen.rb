@@ -20,15 +20,23 @@ class Queen < Piece
 
     def moves
         m = self.bishop.moves + self.rook.moves
-        m.map do |s|
+        queen_m = m.map do |s|
             s = 'Q' + s[1..-1]
             if !s.end_with?('+')
                 h = decode_move(s)
                 if self.bishop.detect_check(h[:r],h[:c]) || self.rook.detect_check(h[:r],h[:c]) then s += '+' end
             end
             s
+        end 
+        return queen_m
+    end
+
+    def moves_that_capture_own_pieces
+        m = self.bishop.moves_that_capture_own_pieces + self.rook.moves_that_capture_own_pieces
+        queen_m = m.map do |s|
+            s = 'Q' + s[1..-1]
         end
-        
+        return queen_m
     end
 
 end

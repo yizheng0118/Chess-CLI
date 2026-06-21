@@ -10,13 +10,56 @@ class King < Piece
         [-1,0,1].each do |dr|
             [-1,0,1].each do |dc|
                 if row+dr >= 0 && row+dr <=7 && col+dc >= 0 && col+dc <= 7 && !(dr == 0 && dc == 0)
-                    if squareEmpty?(row+dr,col+dc) then encode_and_add_move(m,row+dr,col+dc) 
-                    elsif board[row+dr][col+dc].side != self.side then encode_and_add_move(m,row+dr,col+dc,captures:true)
+                    if squareEmpty?(row+dr,col+dc) && !square_attacked?(row+dr,col+dc) then encode_and_add_move(m,row+dr,col+dc) 
+                    elsif board[row+dr][col+dc].side != self.side && !square_defended?(row+dr,col+dc) then encode_and_add_move(m,row+dr,col+dc,captures:true)
                     end
                 end
             end
         end
         return m
+    end
+
+    def moves_that_capture_own_pieces
+        m = []
+        [-1,0,1].each do |dr|
+            [-1,0,1].each do |dc|
+                if row+dr>=0 && row+dr<=7 && col+dc>=0 && col+dc<=7 && !(dr==0 && dc==0)
+                    if !squareEmpty?(row+dr,col+dc) && board[row+dr][col+dc].side == self.side
+                        encode_and_add_move(m,row+dr,col+dc,captures:true)
+                    end
+                end
+            end
+        end
+        m
+    end
+
+    #for making sure the king only captures an enemy piece that isn't defended
+    def square_defended?(r,c) 
+        board.each do |row|
+            row.each do |p|
+                if p!= nil && p.side != self.side
+                    p.moves_that_capture_own_pieces.each do | enemy_move |
+                    h = p.decode_move(enemy_move)
+                    if h[:r] == r && h[:c] == c then return true end
+                    end
+                end
+            end
+        end
+        return false
+    end
+    
+    def square_attacked?(r,c)
+        board.each do |row|
+            row.each do |p|
+                if p != nil && p.side != self.side
+                    p.moves.each do |enemy_move| 
+                    h = p.decode_move(enemy_move)
+                    if h[:r] == r && h[:c] == c then return true end
+                    end
+                end
+            end
+        end
+        return false
     end
 
     def encode_and_add_move(list, r, c, captures:false)
