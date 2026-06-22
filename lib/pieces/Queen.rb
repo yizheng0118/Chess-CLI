@@ -5,9 +5,9 @@ require_relative './Bishop.rb'
 class Queen < Piece
     attr_accessor :bishop, :rook
     def initialize(name,side,row,col,board)
-        super(name,side,row,col,board)
         @bishop = Bishop.new('QB',side,row,col,board)
         @rook = Rook.new("QR",side,row,col,board)
+        super(name,side,row,col,board)
     end
 
     def moveTo(r,c)

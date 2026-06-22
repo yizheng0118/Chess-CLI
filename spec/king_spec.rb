@@ -1,6 +1,8 @@
 require_relative './spec_helper.rb'
 require_relative '../lib/pieces/King.rb'
 require_relative '../lib/pieces/Pawn.rb'
+require_relative '../lib/pieces/Knight.rb'
+require_relative '../lib/pieces/Rook.rb'
 
 RSpec.describe King do
     let(:board) { Array.new(8) { Array.new(8) } }
@@ -58,6 +60,24 @@ RSpec.describe King do
                     board[1][5] = Pawn.new('p','B',1,5,board)
                     expect(king.moves).to match_array(moves)
                 end
+            end
+        end
+    end
+    describe 'pieces pinned to the king' do
+        context 'W king on e1, W knight on e2, B rook on e8' do
+            subject!(:king) { described_class.new('K','W',0,4,board) }
+            before do
+                @wn = Knight.new('N','W',1,4,board)
+                @br = Rook.new('R','B',7,4,board)
+            end
+            it 'black rook can take the knight' do
+                expect(@br.moves).to include('Rxe2+')
+            end
+            it 'white knight detects it is pinned' do
+                expect(@wn.detect_pinned).to include(pinned:true)
+            end
+            it 'white knight cannot move' do
+                expect(@wn.moves).to match_array([])
             end
         end
     end

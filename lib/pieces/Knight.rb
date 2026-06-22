@@ -5,7 +5,7 @@ class Knight < Piece
         super(name,side,row,col,board)
     end
 
-    def moves
+    def unpinned_moves
         m = []
         [-2,-1,1,2].each do |dr|
             dc1 = 3 - dr.abs

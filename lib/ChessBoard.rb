@@ -114,16 +114,13 @@ class ChessBoard
 
     def player_make_move(move)
         if self.turn == 'W' then p = find_piece_to_move(move,white_pieces)
-        else p = find_piece_to_move(move,black_pieces) end
+        else p = find_piece_to_move(move,black_pieces) end   
         if p == nil
             puts 'invalid move'
             return
         end
-        move_status = move_piece_on_board(move,p)
-        if move_status == nil
-            puts 'invalid king move'
-            return
-        end
+        move_piece_on_board(move,p)
+
         if self.turn == 'W' then self.turn = 'B'
         else self.turn = 'W' end
     end
@@ -148,7 +145,7 @@ class ChessBoard
     end
 
     def move_piece_on_board(move,piece)
-        return 1
+        
     end
 
     def white_king_in_checkmate?(checking_piece)
