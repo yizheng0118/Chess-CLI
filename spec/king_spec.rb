@@ -5,11 +5,23 @@ require_relative '../lib/pieces/Pawn.rb'
 RSpec.describe King do
     let(:board) { Array.new(8) { Array.new(8) } }
     describe '#moves' do
-        context 'King on e4' do
+        context 'W King on e4' do
             subject(:king) { described_class.new('K','W',3,4,board) }
             it 'can move one square in every direction' do
                 moves = ['Ke5','Ke3','Kd4','Kf4','Kd5','Kd3','Kf5','Kf3']
                 expect(king.moves).to match_array(moves)
+            end
+            context 'B pawn on e5 and B King on e6' do
+                before do
+                    @bk = King.new('K','B',5,4,board)
+                    bp = Pawn.new('P','B',4,4,board)
+                end
+                it 'black king protects e5' do
+                    expect(@bk.moves_that_capture_own_pieces).to match_array(['Kxe5'])
+                end
+                it 'white king cannot take e5 nor move up to the 5th rank' do
+                    expect(king.moves).to match_array(['Ke3','Kd3','Kf3'])
+                end
             end
         end
         context 'King on a1' do
@@ -46,7 +58,6 @@ RSpec.describe King do
                     board[1][5] = Pawn.new('p','B',1,5,board)
                     expect(king.moves).to match_array(moves)
                 end
-
             end
         end
     end

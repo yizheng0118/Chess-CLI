@@ -37,6 +37,10 @@ class Piece
         return hash
     end
 
+    def attacked_squares
+        return self.moves
+    end
+
     def to_s
         return side =='W' ? self.name : self.name.downcase
     end
