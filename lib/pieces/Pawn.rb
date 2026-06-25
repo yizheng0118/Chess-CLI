@@ -4,7 +4,7 @@ class Pawn < Piece
         super(name,side,row,col,board)
     end
 
-    def moves
+    def unpinned_moves
         m = []
         if self.side == 'W'            
             if squareEmpty?(row+1, col) # move forward one

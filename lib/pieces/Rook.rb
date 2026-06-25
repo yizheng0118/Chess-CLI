@@ -5,7 +5,7 @@ class Rook < Piece
         super(name,side,row,col,board)
     end
 
-    def moves
+    def unpinned_moves
         m = []
         t_c = col
         while t_c > 0 # check left

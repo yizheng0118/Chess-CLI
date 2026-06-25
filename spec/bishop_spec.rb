@@ -1,10 +1,15 @@
 require_relative './spec_helper.rb'
 require_relative '../lib/pieces/Bishop.rb'
+require_relative '../lib/pieces/King.rb'
+require_relative '../lib/pieces/Rook.rb'
+require_relative '../lib/pieces/Queen.rb'
 
 RSpec.describe Bishop do
     let(:board) { Array.new(8) {Array.new(8) } }
     describe '#moves' do
-
+        before do
+            King.new('K','W',0,0,board)
+        end
         context 'W bishop on e4' do
             subject(:bishop) { described_class.new('B','W',3,4,board)}
             it 'can move up to the left' do
@@ -78,6 +83,33 @@ RSpec.describe Bishop do
                 end
             end
 
+        end
+    end
+
+    describe 'pinned to king' do 
+        context 'wk on e1, wb on e2, br on e8' do
+            before do
+                King.new('K','W',0,4,board)
+                @wb = Bishop.new('B','W',1,4,board)
+                Rook.new('R','B',7,4,board)
+            end
+            it 'white bishop cannot move' do
+                expect(@wb.moves).to match_array([])
+            end
+            it 'can move if pin is blocked' do 
+                Bishop.new('B','B',6,4,board)
+                expect(@wb.moves).not_to match_array([])
+            end
+        end
+        context 'wk on e1, wb on f2, bq on h4' do 
+            before do
+                King.new('K','W',0,4,board)
+                @wb = Bishop.new('B','W',1,5,board)
+                Queen.new('Q','B',3,7,board)
+            end
+            it 'bishop can only move along the pinned diagonal' do
+                expect(@wb.moves).to match_array(['Bg3','Bxh4']) 
+            end
         end
     end
 

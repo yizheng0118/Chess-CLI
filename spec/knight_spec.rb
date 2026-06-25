@@ -71,6 +71,7 @@ RSpec.describe Knight do
             end
             it 'wn no moves with the rook' do
                 @br = Rook.new('R','B',7,4,board)
+                #puts @wn.detect_pinned[:squares_between].inspect
                 expect(@wn.moves).to match_array([])
             end
         end

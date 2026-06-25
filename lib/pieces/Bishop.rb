@@ -5,7 +5,7 @@ class Bishop < Piece
         super(name,side,row,col,board)
     end
 
-    def moves
+    def unpinned_moves
         m = []
         # top left
         tr = row

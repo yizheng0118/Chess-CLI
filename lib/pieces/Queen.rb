@@ -18,7 +18,7 @@ class Queen < Piece
         self.rook.col = c
     end
 
-    def moves
+    def unpinned_moves
         m = self.bishop.moves + self.rook.moves
         queen_m = m.map do |s|
             s = 'Q' + s[1..-1]

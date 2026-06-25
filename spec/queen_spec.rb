@@ -1,9 +1,14 @@
 require_relative '../lib/pieces/Queen.rb'
 require_relative './spec_helper.rb'
+require_relative '../lib/pieces/King.rb'
+
 
 RSpec.describe Queen do
     let(:board) { Array.new(8) { Array.new(8) } }
     describe '#move' do
+        before do
+            King.new('K','W',0,0,board)
+        end
         context 'queen on e4' do
             subject(:queen) { described_class.new('Q','W',3,4,board)}
             it 'can move vertically along the e file' do
@@ -36,6 +41,9 @@ RSpec.describe Queen do
     end
 
     describe 'checks' do
+        before do 
+            King.new('K','W',0,0,board)
+        end
         context 'W queen on e4 and B king on g8' do
             subject(:queen) { described_class.new('Q','W',3,4,board) }
             before do
@@ -71,6 +79,32 @@ RSpec.describe Queen do
                 board[0][2] = double(side:'W')
                 board[2][0] = double(side:'W')
                 expect(queen.moves_that_capture_own_pieces).to match_array(['Qxa2','Qxb1','Qxb2'])
+            end
+        end
+    end
+
+    describe 'pinned to king' do 
+        context 'w K on e1, w Q on e2, b Q on e8' do 
+            before do
+                King.new('K','W',0,4,board)
+                @wq = Queen.new('Q','W',1,4,board)
+                Queen.new('Q','B',7,4,board)
+            end
+            it 'can only move along the e file' do 
+                moves = '34567'.each_char.map { |x| "Qe#{x}" }
+                moves.append('Qxe8')
+                expect(@wq.moves).to match_array(moves)
+            end
+        end
+        context 'w K on a1, w Q on b2, bQ on h8' do 
+            before do
+                King.new('K','W',0,0,board)
+                @wq = Queen.new('Q','W',1,1,board)
+                Queen.new('Q','B',7,7,board)
+            end
+            it 'can only move along the diagonal' do 
+                moves = ['Qc3','Qd4','Qe5','Qf6','Qg7','Qxh8']
+                expect(@wq.moves).to match_array(moves)
             end
         end
     end

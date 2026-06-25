@@ -1,9 +1,14 @@
 require_relative '../lib/pieces/Rook.rb'
 require_relative './spec_helper.rb'
+require_relative '../lib/pieces/King.rb'
+require_relative '../lib/pieces/Queen.rb'
 
 RSpec.describe Rook do
     let(:board) { Array.new(8) { Array.new(8) } }
     describe '#moves' do
+        before do 
+            white_king = King.new('K','W',1,6,board)
+        end
         context 'rook on a1' do 
             subject(:rook) { described_class.new('R','W',0,0,board) }
             it 'can move up and right' do
@@ -85,6 +90,34 @@ RSpec.describe Rook do
                 board[7][4] = described_class.new('P','B',7,4,board)
                 expect(rook.moves_that_capture_own_pieces).to match_array(['Rxe8','Rxe1','Rxa4','Rxh4'])
             end
+        end
+    end
+    describe 'pinned to King' do
+        describe 'W K on e1, W R on e2, B R on e8' do
+            it 'W R can\'t move horizontally, only vertically' do
+                wk = King.new('K','W',0,4,board)
+                wr = Rook.new('R','W',1,4,board)
+                br = Rook.new('R','B',7,4,board)
+                expect(wr.moves).to match_array(['Re3','Re4','Re5','Re6','Re7','Rxe8'])
+            end
+        end
+        describe 'W K on e1, W R on d2, B Q on a5' do
+            before do
+                wk = King.new('K','W',0,4,board)
+                @wr = Rook.new('R','W',1,3,board)
+                bq = Queen.new('Q','B',4,0,board)
+            end
+            it 'W R can\'t move' do
+                expect(@wr.moves).to match_array([])
+            end
+            context 'another rook in between on b4' do
+                it 'e2 Rook an move normally' do
+                    wr2 = Rook.new('R','W',2,2,board)
+                    #p @wr.moves
+                    expect(@wr.moves).not_to match_array([])
+                end
+            end
+
         end
     end
 end

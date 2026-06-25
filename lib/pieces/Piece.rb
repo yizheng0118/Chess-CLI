@@ -55,6 +55,8 @@ class Piece
             if attacker != nil && squares_between.include?([self.row,self.col]) #the piece is in the path of the enemy rook/queen and its king
                 pieces_between = squares_between.count{ |r,c| board[r][c] != nil }
                 if pieces_between == 1
+                    # also add attacker's coords to the squares_bewteen array (incase the piece can capture the pinning attaker)
+                    squares_between.append([attacker.row,attacker.col])
                     return {pinned:true, attacker:attacker, squares_between:squares_between}
                 end
             end
@@ -83,6 +85,7 @@ class Piece
             if attacker != nil && squares_between.include?([self.row,self.col]) #the piece is in the path of the enemy rook/queen and its king
                 pieces_between = squares_between.count{ |r,c| board[r][c] != nil }
                 if pieces_between == 1
+                    squares_between.append([attacker.row,attacker.col])
                     return {pinned:true, attacker:attacker, squares_between:squares_between}
                 end
             end
