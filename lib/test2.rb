@@ -6,18 +6,15 @@ require_relative './pieces/Knight.rb'
 require_relative './pieces/Rook.rb'
 #require 'pry-byebug'
 
-board = Array.new(8) {Array.new(8)}
-wk = King.new('K','W',0,4,board)    #WK on e1
-bk = King.new('K','B',7,7,board)    #BK on h8 
+chessboard = ChessBoard.new
+fen = "rnb1kb1r/ppppqppp/5n2/4p2Q/2B1P4/8/PPPP1PPP/RNB1K1NR"
+chessboard.import_game(fen)
 
+chessboard.new_game
+wk = chessboard.white_king
+bk = chessboard.black_king
 
-wq = Queen.new('Q','W',6,6,board)   #WQ on g7
-wp = Pawn.new('P','W',5,5,board)    #WP on f6
+chessboard.player_move_loop
 
-br = Rook.new('R','B',6,0,board)    #BR on a7
-
-puts "#{bk.moves.inspect}"
-puts "#{bk.deteck_checkmate}"
-puts "#{br.moves.inspect}"
 
 

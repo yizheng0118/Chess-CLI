@@ -21,10 +21,12 @@ class King < Piece
         return m
     end
     
-    def deteck_checkmate
+    def detect_checkmate
         h = detect_king_attacked
         move_found = false
-        if h[:attacked] && self.moves == []
+        if h[:attacked] == false || self.moves != []
+            return false
+        else self.moves == []
             board.each do |brow|
                 brow.each do |p| 
                     if p != nil && p.side == self.side && p.moves != []
