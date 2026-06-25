@@ -9,12 +9,15 @@ require_relative './pieces/Rook.rb'
 board = Array.new(8) {Array.new(8)}
 wk = King.new('K','W',0,4,board)    #WK on e1
 bk = King.new('K','B',7,7,board)    #BK on h8 
-#bn = Knight.new('N','B',1,2,board)
-br = Rook.new('R','B',7,4,board)
-wr = Rook.new('R','W',2,7,board)
 
-puts "#{wk.moves.inspect}"
-puts "#{wr.moves.inspect}"
+
+wq = Queen.new('Q','W',6,6,board)   #WQ on g7
+wp = Pawn.new('P','W',5,5,board)    #WP on f6
+
+br = Rook.new('R','B',6,0,board)    #BR on a7
+
+puts "#{bk.moves.inspect}"
+puts "#{bk.deteck_checkmate}"
 puts "#{br.moves.inspect}"
 
 

@@ -21,6 +21,20 @@ class King < Piece
         return m
     end
     
+    def deteck_checkmate
+        h = detect_king_attacked
+        move_found = false
+        if h[:attacked] && self.moves == []
+            board.each do |brow|
+                brow.each do |p| 
+                    if p != nil && p.side == self.side && p.moves != []
+                        return false
+                    end
+                end
+            end
+        end
+        return true
+    end
 
     #for when two king are both looking at the same square 
     #don't check defended to avoid infinite recursion
