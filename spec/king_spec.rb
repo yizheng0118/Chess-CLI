@@ -71,6 +71,7 @@ RSpec.describe King do
                 @br = Rook.new('R','B',7,4,board)
             end
             it 'black rook can take the knight' do
+                King.new('K','B',7,7,board)
                 expect(@br.moves).to include('Rxe2+')
             end
             it 'white knight detects it is pinned' do

@@ -20,6 +20,7 @@ class King < Piece
         end
         return m
     end
+    
 
     #for when two king are both looking at the same square 
     #don't check defended to avoid infinite recursion

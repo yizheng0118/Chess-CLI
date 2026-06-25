@@ -19,6 +19,14 @@ class Piece
             end
             return moves
         end
+        h = detect_king_attacked
+        if h[:attacked]
+            moves = unpinned_moves.filter do |m|
+                h2 = decode_move(m)
+                h[:valid_squares].include?([h2[:r],h2[:c]])
+            end
+            return moves
+        end
         return unpinned_moves
     end
 
@@ -57,7 +65,7 @@ class Piece
                 if pieces_between == 1
                     # also add attacker's coords to the squares_bewteen array (incase the piece can capture the pinning attaker)
                     squares_between.append([attacker.row,attacker.col])
-                    return {pinned:true, attacker:attacker, squares_between:squares_between}
+                    return {pinned:true,attacker:attacker, squares_between:squares_between}
                 end
             end
         end
@@ -91,6 +99,72 @@ class Piece
             end
         end
         return {pinned:false}
+    end
+
+    # checks if king is attacked and returns the squares that block the attack or capture the attacker
+    def detect_king_attacked
+        #check for knight checks first
+        k = find_king
+        [-2,-1,1,2].each do |dr|
+            dc1 = 3 - dr.abs
+            dc2 = -dc1
+            r = k.row+dr
+            c1 = k.col+dc1
+            c2 = k.col+dc2
+            if r>=0&&r<=7 && c1>=0&&c1<=7 
+                p = self.board[r][c1]
+                if p != nil && p.side != self.side && p.instance_of?(Knight)
+                    return {attacked:true, valid_squares:[[r,c1]]}
+                end
+            end
+            if r>=0&&r<=7 && c2>=0&&c2<=7
+                p = self.board[r][c2]
+                if p != nil && p.side != self.side && p.instance_of?(Knight)
+                    return {attacked:true, valid_squares:[[r,c2]]}
+                end
+            end
+        end
+        #check for rook/queen horizontal and vertical checks
+        [[1,0],[-1,0],[0,-1],[0,1]].each do |dr,dc|
+            r = k.row+dr
+            c = k.col+dc
+            valid_squares = []
+            while r>=0 && r<=7 && c>=0 && c<=7
+                p = self.board[r][c]
+                if p == nil
+                    valid_squares.append([r,c])
+                else
+                    if p.side != self.side && (p.instance_of?(Rook)||p.instance_of?(Queen))
+                        valid_squares.append([r,c])
+                        return {attacked:true, valid_squares:valid_squares}
+                    end
+                    break
+                end
+                r += dr
+                c += dc
+            end
+        end
+        #check diagonal
+        [[1,1],[-1,1],[1,-1],[-1,-1]].each do |dr,dc|
+            r = k.row+dr
+            c = k.col+dc
+            valid_squares = []
+            while r>=0 && r<=7 && c>=0 && c<=7
+                p = self.board[r][c]
+                if p == nil
+                    valid_squares.append([r,c])
+                else
+                    if p.side != self.side && (p.instance_of?(Rook)||p.instance_of?(Queen))
+                        valid_squares.append([r,c])
+                        return {attacked:true, valid_squares:valid_squares}
+                    end
+                    break
+                end
+                r += dr
+                c += dc
+            end
+        end
+        return {attacked:false}
     end
 
     def find_king 
@@ -130,7 +204,7 @@ class Piece
     end
 
     def attacked_squares
-        return self.moves
+        return self.unpinned_moves
     end
 
     def to_s
