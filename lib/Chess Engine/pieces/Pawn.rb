@@ -1,4 +1,5 @@
 require_relative './Piece.rb'
+require_relative './King.rb'
 class Pawn < Piece
     def initialize(name,side,row,col,board)
         super(name,side,row,col,board)
@@ -39,17 +40,17 @@ class Pawn < Piece
 
     def detect_check(r, c)
         if side == 'W'
-            if r+1 <= 7 && c-1 >= 0 && !squareEmpty?(r+1,c-1) && board[r+1][c-1].side == 'B' && board[r+1][c-1].name == 'K'
+            if r+1 <= 7 && c-1 >= 0 && !squareEmpty?(r+1,c-1) && board[r+1][c-1].side == 'B' && board[r+1][c-1].instance_of?(King)
                 return true
             end
-            if r+1 <= 7 && c+1 <= 7 && !squareEmpty?(r+1,c+1) && board[r+1][c+1].side == 'B' && board[r+1][c+1].name == 'K'
+            if r+1 <= 7 && c+1 <= 7 && !squareEmpty?(r+1,c+1) && board[r+1][c+1].side == 'B' && board[r+1][c+1].instance_of?(King)
                 return true
             end
         elsif side == 'B'
-            if r-1 >= 0 && c-1 >= 0 && !squareEmpty?(r-1,c-1) && board[r-1][c-1].side == 'W' && board[r-1][c-1].name == 'K'
+            if r-1 >= 0 && c-1 >= 0 && !squareEmpty?(r-1,c-1) && board[r-1][c-1].side == 'W' && board[r-1][c-1].instance_of?(King)
                 return true
             end
-            if r-1 >= 0 && c+1 <= 7 && !squareEmpty?(r-1,c+1) && board[r-1][c+1].side == 'W' && board[r-1][c+1].name == 'K'
+            if r-1 >= 0 && c+1 <= 7 && !squareEmpty?(r-1,c+1) && board[r-1][c+1].side == 'W' && board[r-1][c+1].instance_of?(King)
                 return true
             end
         end

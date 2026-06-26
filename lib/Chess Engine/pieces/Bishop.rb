@@ -1,5 +1,5 @@
 require_relative './Piece.rb'
-
+require_relative './King.rb'
 class Bishop < Piece
     def initialize(name,side,row,col,board)
         super(name,side,row,col,board)
@@ -121,7 +121,7 @@ class Bishop < Piece
         tc = c
         while tr < 7 && tc > 0
             if !squareEmpty?(tr+1, tc-1)
-                if board[tr+1][tc-1].side != self.side && board[tr+1][tc-1].name == 'K' then return true 
+                if board[tr+1][tc-1].side != self.side && board[tr+1][tc-1].instance_of?(King) then return true 
                 else break end
             else 
                 tr += 1
@@ -134,7 +134,7 @@ class Bishop < Piece
         tc = c
         while tr < 7 && tc < 7
             if !squareEmpty?(tr+1,tc+1)
-                if board[tr+1][tc+1].side != self.side && board[tr+1][tc+1].name == 'K' then return true
+                if board[tr+1][tc+1].side != self.side && board[tr+1][tc+1].instance_of?(King) then return true
                 else break end
             else
                 tr += 1
@@ -147,7 +147,7 @@ class Bishop < Piece
         tc = c
         while tr > 0 && tc > 0
             if !squareEmpty?(tr-1,tc-1)
-                if board[tr-1][tc-1].side != self.side && board[tr-1][tc-1].name == 'K' then return true
+                if board[tr-1][tc-1].side != self.side && board[tr-1][tc-1].instance_of?(King) then return true
                 else break end
             else
                 tr -= 1  
@@ -160,7 +160,7 @@ class Bishop < Piece
         tc = c
         while tr > 0 && tc < 7
             if !squareEmpty?(tr-1,tc+1)
-                if board[tr-1][tc+1].side != self.side && board[tr-1][tc+1].name == 'K' then return true
+                if board[tr-1][tc+1].side != self.side && board[tr-1][tc+1].instance_of?(King) then return true
                 else break end
             else
                 tr -= 1

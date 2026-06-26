@@ -203,12 +203,20 @@ class Piece
         return hash
     end
 
+    def decode_moves_to_coords
+        list = moves.map do |m|
+            h = decode_move(m)
+            [h[:r],h[:c]]
+        end
+        return list
+    end
+
     def attacked_squares
         return self.unpinned_moves
     end
 
     def to_s
-        return side =='W' ? self.name : self.name.downcase
+        self.name
     end
     
 end

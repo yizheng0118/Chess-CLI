@@ -1,4 +1,5 @@
 require_relative './Piece.rb'
+require_relative './King.rb'
 class Knight < Piece
     
     def initialize(name,side,row,col,board)
@@ -51,10 +52,10 @@ class Knight < Piece
             dc1 = 3 - dr.abs
             dc2 = -dc1
             if r + dr >= 0 && r + dr <= 7 && c + dc1 >= 0 && c + dc1 <= 7 
-                if !squareEmpty?(r+dr,c+dc1) && board[r+dr][c+dc1].side != self.side && board[r+dr][c+dc1].name == 'K' then return true end
+                if !squareEmpty?(r+dr,c+dc1) && board[r+dr][c+dc1].side != self.side && board[r+dr][c+dc1].instance_of?(King) then return true end
             end
             if r + dr >= 0 && r + dr <= 7 && c + dc2 >= 0 && c + dc2 <= 7    
-                if !squareEmpty?(r+dr,c+dc2) && board[r+dr][c+dc2].side != self.side && board[r+dr][c+dc2].name == 'K' then return true end
+                if !squareEmpty?(r+dr,c+dc2) && board[r+dr][c+dc2].side != self.side && board[r+dr][c+dc2].instance_of?(King) then return true end
             end        
         end
         return false

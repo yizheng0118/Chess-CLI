@@ -18,27 +18,27 @@ class ChessBoard
         self.board = Array.new(8) { Array.new(8) }
         self.turn = 'W'
         (0..7).each do |n|
-            white_pawn = Pawn.new('P','W',1,n,board)
-            black_pawn = Pawn.new('p','B',6,n,board)
+            white_pawn = Pawn.new("♟",'W',1,n,board)
+            black_pawn = Pawn.new("♙",'B',6,n,board)
         end
-        r1 = Rook.new('R','W',0,0,board)
-        k1 = Knight.new('N','W',0,1,board)
-        b1 = Bishop.new('B','W',0,2,board)
-        q = Queen.new('Q','W',0,3,board)
-        k = King.new('K','W',0,4,board)
+        r1 = Rook.new('♜','W',0,0,board)
+        k1 = Knight.new('♞','W',0,1,board)
+        b1 = Bishop.new('♝','W',0,2,board)
+        q = Queen.new('♛','W',0,3,board)
+        k = King.new('♚','W',0,4,board)
         self.white_king = k
-        b2 = Bishop.new('B','W',0,5,board)
-        k2 = Knight.new('N','W',0,6,board)
-        r2 = Rook.new('R','W',0,7,board)
-        r1 = Rook.new('r','B',7,0,board)
-        k1 = Knight.new('n','B',7,1,board)
-        b1 = Bishop.new('b','B',7,2,board)
-        q = Queen.new('q','B',7,3,board)
-        k = King.new('K','B',7,4,board)
+        b2 = Bishop.new('♝','W',0,5,board)
+        k2 = Knight.new('♞','W',0,6,board)
+        r2 = Rook.new('♜','W',0,7,board)
+        r1 = Rook.new('♖','B',7,0,board)
+        k1 = Knight.new('♘','B',7,1,board)
+        b1 = Bishop.new('♗','B',7,2,board)
+        q = Queen.new('♕','B',7,3,board)
+        k = King.new('♔','B',7,4,board)
         self.black_king = k
-        b2 = Bishop.new('b','B',7,5,board)
-        k2 = Knight.new('n','B',7,6,board)
-        r2 = Rook.new('r','B',7,7,board)
+        b2 = Bishop.new('♗','B',7,5,board)
+        k2 = Knight.new('♘','B',7,6,board)
+        r2 = Rook.new('♖','B',7,7,board)
     end
 
     # rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
@@ -201,9 +201,9 @@ class ChessBoard
         board.reverse.map do |row|
             row.each do |p|
                 if p == nil
-                    s += '.'
+                    s += '[  ]'
                 else
-                    s += p.name
+                    s += "[" + p.name + " ]"
                 end
             end
             s += "\n"

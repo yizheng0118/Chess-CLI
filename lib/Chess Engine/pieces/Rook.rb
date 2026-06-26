@@ -1,4 +1,5 @@
 require_relative './Piece.rb'
+require_relative './King.rb'
 
 class Rook < Piece
     def initialize(name,side,row,col,board)
@@ -95,28 +96,28 @@ class Rook < Piece
         t_c = c
         while t_c > 0 # check left
             if !squareEmpty?(r,t_c-1) 
-                if board[r][t_c-1].side != self.side && board[r][t_c-1].name == 'K' then return true 
+                if board[r][t_c-1].side != self.side && board[r][t_c-1].instance_of?(King) then return true 
                 else break end
             else t_c -= 1 end
         end
         t_c = c
         while t_c < 7 # check right
             if !squareEmpty?(r,t_c+1)
-                if board[r][t_c+1].side != self.side && board[r][t_c+1].name == 'K' then return true
+                if board[r][t_c+1].side != self.side && board[r][t_c+1].instance_of?(King) then return true
                 else break end
             else t_c += 1 end
         end
         t_r = r 
         while t_r > 0 # check down
             if !squareEmpty?(t_r-1,c)
-                if board[t_r-1][c].side != self.side && board[t_r-1][c].name == 'K' then return true
+                if board[t_r-1][c].side != self.side && board[t_r-1][c].instance_of?(King) then return true
                 else break end
             else t_r -= 1 end
         end
         t_r = r 
         while t_r < 7 # check up
             if !squareEmpty?(t_r+1,c)
-                if board[t_r+1][c].side != self.side && board[t_r+1][c].name == 'K' then return true
+                if board[t_r+1][c].side != self.side && board[t_r+1][c].instance_of?(King) then return true
                 else break end
             else t_r += 1 end
         end
